@@ -7,6 +7,7 @@ Sprint 1 implementation for a mobile-first personal finance app with:
 - Supabase Auth + PostgreSQL base schema + RLS policies
 - Onboarding + account management (create, edit, archive)
 - Foundation for transactions with `name` + `category`
+- Home quick-entry flow with category search chips, optional notes and field-level validation
 
 ## 1. Install
 

@@ -119,6 +119,14 @@
   - `Expense` and `Income` buttons now open a sheet from the bottom instead of navigating away.
   - Added quick-entry form (account, category, concept, amount, date) with locale i18n (`ca/es/en`).
   - Saves into `transactions` and updates related account balance, then refreshes current page.
+- Expanded quick-entry bottom-sheet flow (Phase 1, Scope 1):
+  - Replaced category `<select>` with a richer picker (search + selectable chips + empty/no-match states).
+  - Added optional `notes` input with live character counter and persistence into `transactions.notes`.
+  - Added strong field-level validation and inline error states for account/category/name/amount/date/notes.
+  - Hardened submit logic against stale account/category selections before insert.
+- Added dedicated transaction validator and test coverage:
+  - New `lib/validators/transactions.ts` schema for quick-entry inputs.
+  - Extended unit tests with transaction validation scenarios (valid payload, future date, notes max length).
 - Updated `ca/es/en` i18n copy for new onboarding steps and dashboard labels.
 - Updated e2e onboarding test flow to match step-by-step onboarding.
 
