@@ -1,0 +1,127 @@
+# Changelog
+
+## 2026-03-15
+
+### Added
+
+- Bootstrapped `finance-mvp` with Next.js 16, TypeScript and Tailwind v4.
+- Added locale routing with `ca`, `es`, `en` using `next-intl` and middleware locale detection.
+- Added typed i18n catalog and locale-aware navigation helpers.
+- Added Supabase client/server integration with middleware session refresh.
+- Implemented Sprint 1 auth screens:
+  - `/{locale}/login`
+  - `/{locale}/register`
+  - `/{locale}/forgot-password`
+- Implemented onboarding flow:
+  - `/{locale}/onboarding`
+  - Preferred currency selection
+  - First account creation
+- Implemented private app shell and protected routes:
+  - `/{locale}/app`
+  - `/{locale}/app/accounts`
+  - `/{locale}/app/settings`
+- Implemented account management (create, edit, archive).
+- Added base dashboard metrics and chart scaffold.
+- Added domain types, utility formatters and Zod validators.
+- Added Supabase SQL schema with tables:
+  - `profiles`
+  - `accounts`
+  - `categories`
+  - `transactions` (with `name` and `category_id`)
+  - `recurrences`
+- Added RLS policies for all user-owned tables.
+- Added quality toolchain and tests:
+  - Vitest unit/integration tests
+  - Playwright e2e tests for locale/auth routing and horizontal overflow guard.
+
+### Changed
+
+- Replaced default Next starter UI with mobile-first finance MVP structure.
+- Added global design tokens and strict horizontal overflow prevention.
+- Rebranded app display name from `Klaris Finance` to `Balance`.
+- Redesigned auth UI (`login`, `register`, `forgot-password`) to match the requested visual style:
+  - Dark hero block with curved-line decoration
+  - Rounded segmented auth tabs
+  - Light rounded form sheet with pill-shaped fields
+  - Icon-led input fields and high-contrast primary CTA
+- Updated locale copy for auth labels (`tabs`, helper prompts and placeholders).
+- Updated route guard convention from `middleware.ts` to `proxy.ts` (Next.js 16 recommendation).
+- Reworked main post-login home screen (`/{locale}/app`) to a wallet-style mobile layout adapted to Balance:
+  - Welcome + monthly signal strip
+  - Quick actions row
+  - Featured account cards with add-account card
+  - Recent transactions list with signed amounts
+  - Product insight card and summary panel
+- Added dashboard i18n keys for `ca`, `es`, and `en` to avoid hardcoded UI copy.
+- Added locale root redirect `/{locale} -> /{locale}/login` to avoid 404 on direct locale entry.
+- Sanitized `.env.example` with safe placeholders and corrected `NEXT_PUBLIC_APP_URL` default.
+- Decoupled environment validation so an invalid `NEXT_PUBLIC_APP_URL` no longer disables Supabase auth setup.
+- Preserved URL query parameters when redirecting `/{locale}` to `/{locale}/login` (required for Supabase email callback `code` flow).
+- Added auth-session bootstrap on login page to auto-redirect authenticated users after callback/session restoration.
+- Unified product UI under a shared mobile-first visual system:
+  - Added global theme tokens (`globals.css`) for canvas, surfaces, action colors and shadows.
+  - Refined shared UI primitives (`Button`, `Input`, `Select`, `Card`, `Badge`) to use tokenized styles.
+  - Updated app/private shells so auth, onboarding and app screens follow the same mobile frame behavior.
+- Reworked onboarding into a 3-step guided wizard:
+  - Step-specific validation (`profile`, `account`, `balance`)
+  - Progress indicator + back/next navigation
+  - Final review block before completion
+- Reworked dashboard content to align with the actual MVP product:
+  - Removed generic "compound interest" emphasis
+  - Added month overview (`inflow`, `outflow`, `net`)
+  - Kept focus on accounts, balances and recent transactions
+- Restored the previous dashboard visual style/palette by request while keeping new mobile-first shell and onboarding improvements.
+- Applied the same visual system across the full product (not only dashboard):
+  - Globalized home-style tokens for palette, radius, shadows and interaction colors.
+  - Updated shared primitives (`Button`, `Card`, `Input`, `Select`, `Badge`) so all forms/screens inherit the same look.
+  - Updated auth links and app navigation accents to match the product style language.
+- Enforced green accent consistency across the product:
+  - Set action/link system to green-accent tokens.
+  - Updated auth segmented tabs active state to accent green.
+  - Updated chart accent color to design-token values.
+- Improved auth contrast in login/register/forgot:
+  - Added dedicated auth panel/field tokens (`--color-auth-panel`, `--color-auth-field`).
+  - Darkened form-sheet background and added field borders for clearer separation.
+- Fixed auth header contrast regression:
+  - Removed background override from `.app-mobile-frame` so auth can keep its dark hero background.
+  - Explicitly applied shell background only to private/onboarding frames.
+- Removed global button shadows from shared button variants for a cleaner, flatter visual style.
+- Added a persistent project design skill:
+  - `skills/balance-design-system/SKILL.md`
+  - Local `AGENTS.md` rule to always apply this skill for UI changes.
+- Updated design-skill rules to encode the latest UI decisions:
+  - Accent green as primary action language.
+  - No global button shadows by default.
+  - Auth contrast requirements and per-context frame background rule.
+- Redesigned bottom navigation to a floating style:
+  - Rounded floating container with centered icon-only items.
+  - Active destination highlighted as a larger green tile.
+  - Increased private layout bottom padding to avoid overlap with content.
+- Updated floating navigation to include `Home` as a first-class destination and reinforce active-page state:
+  - Center `Home` item in the icon layout.
+  - Added explicit `aria-current="page"` and stronger active visual treatment.
+  - Added missing `nav.home` translations for `ca/es/en`.
+- Repositioned `Expense/Income` quick actions from top-home cards to floating controls above bottom navigation:
+  - Removed top action chips from dashboard hero to reduce visual noise.
+  - Added two floating CTA buttons (`Expense`, `Income`) directly above mobile nav.
+  - Increased private app bottom padding to avoid overlap with floating controls.
+- Enforced white foreground on dark `Expense` floating CTA:
+  - Forced white text and icon color when button background is black.
+- Removed the compound-interest promo banner from home dashboard to keep MVP content focused on core finance actions.
+- Added account unarchive support in account management:
+  - Archived accounts now show an explicit `Unarchive` action.
+  - Unified account status updates (`active`/`archived`) under one shared handler.
+  - Added i18n keys for unarchive action and unarchive error (`ca/es/en`).
+- Changed home account presentation from stacked cards to a horizontal slider:
+  - Active accounts are now shown in a mobile-first horizontal carousel with snap scrolling.
+  - `New account` card is included as a final slide for quick access.
+- Implemented in-place transaction creation with bottom-sheet modal from floating actions:
+  - `Expense` and `Income` buttons now open a sheet from the bottom instead of navigating away.
+  - Added quick-entry form (account, category, concept, amount, date) with locale i18n (`ca/es/en`).
+  - Saves into `transactions` and updates related account balance, then refreshes current page.
+- Updated `ca/es/en` i18n copy for new onboarding steps and dashboard labels.
+- Updated e2e onboarding test flow to match step-by-step onboarding.
+
+### Notes
+
+- Supabase env vars are required for real auth/data interactions.

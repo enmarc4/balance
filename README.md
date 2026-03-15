@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Balance MVP
 
-## Getting Started
+Sprint 1 implementation for a mobile-first personal finance app with:
 
-First, run the development server:
+- Next.js 16 + App Router + TypeScript
+- Locale routing with `ca`, `es`, `en` (`/[locale]/...`)
+- Supabase Auth + PostgreSQL base schema + RLS policies
+- Onboarding + account management (create, edit, archive)
+- Foundation for transactions with `name` + `category`
+
+## 1. Install
+
+```bash
+npm install
+```
+
+## 2. Configure env
+
+Create `.env.local`:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL="https://YOUR_PROJECT.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="YOUR_ANON_KEY"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+```
+
+## 3. Apply SQL schema in Supabase
+
+Run `supabase/schema.sql` in Supabase SQL editor.
+
+This creates:
+
+- `profiles`
+- `accounts`
+- `categories`
+- `transactions`
+- `recurrences`
+- RLS policies for all user-owned tables
+
+## 4. Run locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Main routes:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `/ca/login`, `/es/login`, `/en/login`
+- `/{locale}/register`
+- `/{locale}/forgot-password`
+- `/{locale}/onboarding`
+- `/{locale}/app`
+- `/{locale}/app/accounts`
+- `/{locale}/app/settings`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 5. Quality checks
 
-## Learn More
+```bash
+npm run lint
+npm run typecheck
+npm run test
+npm run test:e2e
+```
 
-To learn more about Next.js, take a look at the following resources:
+## i18n contract
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Messages live in `i18n/messages.ts`.
+- Components should use translation keys, not inline product copy.
+- Locale default is `ca`, with browser locale detection handled by `proxy.ts`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Notes
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- If Supabase env vars are missing, auth/data routes show setup warnings.
+- Currency conversion between accounts is intentionally out of Sprint 1 scope.

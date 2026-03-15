@@ -1,26 +1,84 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-canvas: #d4d4d7;
+  --color-shell: #f3f3f4;
+  --color-surface: #dfdfe1;
+  --color-surface-2: #e5e5e7;
+  --color-surface-3: #f4f4f5;
+  --color-card: #f4f4f5;
+  --color-auth-panel: #dddddf;
+  --color-auth-field: #f6f6f7;
+  --color-text: #111114;
+  --color-text-muted: #65656b;
+  --color-border: #d0d0d5;
+  --color-action: #9ce66f;
+  --color-action-hover: #8ed960;
+  --color-action-contrast: #203f10;
+  --color-link: #2d5f16;
+  --color-accent: #9ce66f;
+  --color-accent-text: #203f10;
+  --color-income: #376f1a;
+  --color-expense: #b23e3e;
+  --radius-pill: 999px;
+  --radius-card: 26px;
+  --radius-shell: 34px;
+  --shadow-shell: 0 22px 52px rgba(0, 0, 0, 0.26);
+  --shadow-card: 0 10px 28px rgba(15, 23, 42, 0.08);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-canvas);
+  color: var(--color-text);
+  font-family: var(--font-manrope), sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-space-grotesk), sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.app-mobile-root {
+  min-height: 100dvh;
+}
+
+.app-mobile-frame {
+  position: relative;
+  margin: 0 auto;
+  width: min(100%, 460px);
+  min-height: 100dvh;
+}
+
+@media (min-width: 768px) {
+  .app-mobile-root {
+    padding: 20px;
+  }
+
+  .app-mobile-frame {
+    min-height: calc(100dvh - 40px);
+    border-radius: var(--radius-shell);
+    overflow: hidden;
+    box-shadow: var(--shadow-shell);
+  }
 }
